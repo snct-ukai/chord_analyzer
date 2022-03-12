@@ -4,12 +4,16 @@ import librosa.display
 import sys
 
 def main():
-  if len(sys.argv) != 2:
+  key_shift: int = 0
+  if len(sys.argv) == 3:
+    key_shift = -(int)(sys.argv[2])
+
+  elif len(sys.argv) != 2:
     print("ファイルを一つ指定してください")
     return
   
-  template_major = np.array([1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0])
-  template_minor = np.array([1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0])
+  template_major = np.roll(np.array([1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0]), key_shift)
+  template_minor = np.roll(np.array([1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0]), key_shift)
   templates = np.array([np.roll(template_major, k) for k in range(0, 12)] + [np.roll(template_minor, k) for k in range(0, 12)])
 
   audiofilepath: str = "./" + str(sys.argv[1])
@@ -26,7 +30,7 @@ def main():
 
   chroma = librosa.feature.chroma_stft(y=y_harmonic, sr=sr)
 
-  delta_chroma = int(60*len(chroma[0])/(tempo*playtime))
+  delta_chroma = int(2*60*len(chroma[0])/(tempo*playtime))
 
   chord_matching_score = np.dot(templates, chroma) #templatesとchromaの内積
   chord_data = np.zeros((len(chord_matching_score), int(len(chord_matching_score[0])/delta_chroma + 1)))
