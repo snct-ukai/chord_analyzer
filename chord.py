@@ -3,6 +3,18 @@ import librosa
 import librosa.display
 import sys
 
+chord_dic = {0: "C", 1: "C#", 2: "D", 3: "D#", 4: "E", 5: "F", 6: "F#", 7: "G", 8: "G#", 9: "A", 10: "A#", 11: "B",
+  12: "Cm", 13: "C#m", 14: "Dm", 15: "D#m", 16: "Em", 17: "Fm", 18: "F#m", 19: "Gm", 20: "G#m", 21: "Am", 22: "A#m", 23: "Bm",
+  24: "Cdim", 25: "C#dim", 26: "Ddim", 27: "D#dim", 28: "Edim", 29: "Fdim", 30: "F#dim", 31: "Gdim", 32: "G#dim", 33: "Adim", 34: "A#dim", 35: "Bdim",
+  36: "Caug", 37: "C#aug", 38: "Daug", 39: "D#aug", 40: "Eaug", 41: "Faug", 42: "F#aug", 43: "Gaug", 44: "G#aug", 45: "Aaug", 46: "A#aug", 47: "Baug",
+  48: "Csus4", 49: "C#sus4", 50: "Dsus4", 51: "D#sus4", 52: "Esus4", 53: "Fsus4", 54: "F#sus4", 55: "Gsus4", 56: "G#sus4", 57: "Asus4", 58: "A#sus4", 59: "Bsus4",
+  60: "Csus2", 61: "C#sus2", 62: "Dsus2", 63: "D#sus2", 64: "Esus2", 65: "Fsus2", 66: "F#sus2", 67: "Gsus2", 68: "G#sus2", 69: "Asus2", 70: "A#sus2", 71: "Bsus2",
+  72: "C7", 73: "C#7", 74: "D7", 75: "D#7", 76: "E7", 77: "F7", 78: "F#7", 79: "G7", 80: "G#7", 81: "A7", 82: "A#7", 83: "B7",
+  84: "Cm7", 85: "C#m7", 86: "Dm7", 87: "D#m7", 88: "Em7", 89: "Fm7", 90: "F#m7", 91: "Gm7", 92: "G#m7", 93: "Am7", 94: "A#m7", 95: "Bm7",
+  96: "C7sus4", 97: "C#7sus4", 98: "D7sus4", 99: "D#7sus4", 100: "E7sus4", 101: "F7sus4", 102: "F#7sus4", 103: "G7sus4", 104: "G#7sus4", 105: "A7sus4", 106: "A#7sus4", 107: "B7sus4",
+  108: "C7sus2", 109: "C#7sus2", 110: "D7sus2", 111: "D#7sus2", 112: "E7sus2", 113: "F7sus2", 114: "F#7sus2", 115: "G7sus2", 116: "G#7sus2", 117: "A7sus2", 118: "A#7sus2", 119: "B7sus2",
+}
+
 def main():
   key_shift: int = 0
   if len(sys.argv) == 3:
@@ -80,28 +92,16 @@ def main():
       i = 0
       j += 1
 
-  before_chord_num: int = -1
   chord: str = ""
 
   for i in range(0, len(chord_data[0])):
     k = np.argmax(chord_data[:,i])
 
-    chord_name = "C" if k == 0 else "C#" if k == 1 else "D" if k == 2 else "D#" if k == 3 else "E" if k == 4 else "F" if k == 5 else "F#" if k == 6 else "G" if k == 7 else "G#" if k == 8 else "A" if k == 9 else "A#" if k == 10 else "B" if k == 11 else \
-    "Cm" if k == 12 else "C#m" if k == 13 else "Dm" if k == 14 else "D#m" if k == 15 else "Em" if k == 16 else "Fm" if k == 17 else "F#m" if k == 18 else "Gm" if k == 19 else "G#m" if k == 20 else "Am" if k == 21 else "A#m" if k == 22 else "Bm" if k == 23 else \
-    "Cdim" if k == 24 else "C#dim" if k == 25 else "Ddim" if k == 26 else "D#dim" if k == 27 else "Edim" if k == 28 else "Fdim" if k == 29 else "F#dim" if k == 30 else "Gdim" if k == 31 else "G#dim" if k == 32 else "Adim" if k == 33 else "A#dim" if k == 34 else "Bdim" if k == 35 else \
-    "Caug" if k == 36 else "C#aug" if k == 37 else "Daug" if k == 38 else "D#aug" if k == 39 else "Eaug" if k == 40 else "Faug" if k == 41 else "F#aug" if k == 42 else "Gaug" if k == 43 else "G#aug" if k == 44 else "Aaug" if k == 45 else "A#aug" if k == 46 else "Baug" if k == 47 else \
-    "Csus4" if k == 48 else "C#sus4" if k == 49 else "Dsus4" if k == 50 else "D#sus4" if k == 51 else "Esus4" if k == 52 else "Fsus4" if k == 53 else "F#sus4" if k == 54 else "Gsus4" if k == 55 else "G#sus4" if k == 56 else "Asus4" if k == 57 else "A#sus4" if k == 58 else "Bsus4" if k == 59 else \
-    "Csus2" if k == 60 else "C#sus2" if k == 61 else "Dsus2" if k == 62 else "D#sus2" if k == 63 else "Esus2" if k == 64 else "Fsus2" if k == 65 else "F#sus2" if k == 66 else "Gsus2" if k == 67 else "G#sus2" if k == 68 else "Asus2" if k == 69 else "A#sus2" if k == 70 else "Bsus2" if k == 71 else \
-    "C7" if k == 72 else "C#7" if k == 73 else "D7" if k == 74 else "D#7" if k == 75 else "E7" if k == 76 else "F7" if k == 77 else "F#7" if k == 78 else "G7" if k == 79 else "G#7" if k == 80 else "A7" if k == 81 else "A#7" if k == 82 else "B7" if k == 83 else \
-    "Cm7" if k == 84 else "C#m7" if k == 85 else "Dm7" if k == 86 else "D#m7" if k == 87 else "Em7" if k == 88 else "Fm7" if k == 89 else "F#m7" if k == 90 else "Gm7" if k == 91 else "G#m7" if k == 92 else "Am7" if k == 93 else "A#m7" if k == 94 else "Bm7" if k == 95 else \
-    "C7sus4" if k == 96 else "C#7sus4" if k == 97 else "D7sus4" if k == 98 else "D#7sus4" if k == 99 else "E7sus4" if k == 100 else "F7sus4" if k == 101 else "F#7sus4" if k == 102 else "G7sus4" if k == 103 else "G#7sus4" if k == 104 else "A7sus4" if k == 105 else "A#7sus4" if k == 106 else "B7sus4" if k == 107 else \
-    "C7sus2" if k == 108 else "C#7sus2" if k == 109 else "D7sus2" if k == 110 else "D#7sus2" if k == 111 else "E7sus2" if k == 112 else "F7sus2" if k == 113 else "F#7sus2" if k == 114 else "G7sus2" if k == 115 else "G#7sus2" if k == 116 else "A7sus2" if k == 117 else "A#7sus2" if k == 118 else "B7sus2" #if k == 119 else \
-
-    #if k != before_chord_num:
+    chord_name = chord_dic[k]
     chord += "{:12s}".format(chord_name)
     if (i + 1) % 16 == 0:
       chord += "\n"
-    before_chord_num = k
+
   print(chord)
 
 main()
