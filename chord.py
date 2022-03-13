@@ -74,8 +74,8 @@ def main():
     "Csus4" if k ==48 else "C#sus4" if k == 49 else "Dsus4" if k == 50 else "D#sus4" if k == 51 else "Esus4" if k == 52 else "Fsus4" if k == 53 else "F#sus4" if k == 54 else "Gsus4" if k == 55 else "G#sus4" if k == 56 else "Asus4" if k == 57 else "A#sus4" if k == 58 else "Bsus4" if k == 59 else \
     "Csus2" if k == 60 else "C#sus2" if k == 61 else "Dsus2" if k == 62 else "D#sus2" if k == 63 else "Esus2" if k == 64 else "Fsus2" if k == 65 else "F#sus2" if k == 66 else "Gsus2" if k == 67 else "G#sus2" if k == 68 else "Asus2" if k == 69 else "A#sus2" if k == 70 else "Bsus2" #if k == 71 else \
 
-    if k != before_chord_num:
-      chord += f'{chord_name}\t\t'
+    #if k != before_chord_num:
+    chord += f'{chord_name}\t\t'
     before_chord_num = k
   print(chord)
 
