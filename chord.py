@@ -13,6 +13,9 @@ chord_dic = {0: "C", 1: "C#", 2: "D", 3: "D#", 4: "E", 5: "F", 6: "F#", 7: "G", 
   84: "Cm7", 85: "C#m7", 86: "Dm7", 87: "D#m7", 88: "Em7", 89: "Fm7", 90: "F#m7", 91: "Gm7", 92: "G#m7", 93: "Am7", 94: "A#m7", 95: "Bm7",
   96: "C7sus4", 97: "C#7sus4", 98: "D7sus4", 99: "D#7sus4", 100: "E7sus4", 101: "F7sus4", 102: "F#7sus4", 103: "G7sus4", 104: "G#7sus4", 105: "A7sus4", 106: "A#7sus4", 107: "B7sus4",
   108: "C7sus2", 109: "C#7sus2", 110: "D7sus2", 111: "D#7sus2", 112: "E7sus2", 113: "F7sus2", 114: "F#7sus2", 115: "G7sus2", 116: "G#7sus2", 117: "A7sus2", 118: "A#7sus2", 119: "B7sus2",
+  120: "Cdim7", 121: "C#dim7", 122: "Ddim7", 123: "D#dim7", 124: "Edim7", 125: "Fdim7", 126: "F#dim7", 127: "Gdim7", 128: "G#dim7", 129: "Adim7", 130: "A#dim7", 131: "Bdim7",
+  132: "Caug7", 133: "C#aug7", 134: "Daug7", 135: "D#aug7", 136: "Eaug7", 137: "Faug7", 138: "F#aug7", 139: "Gaug7", 140: "G#aug7", 141: "Aaug7", 142: "A#aug7", 143: "Baug7",
+  144: "C5", 145: "C#5", 146: "D5", 147: "D#5", 148: "E5", 149: "F5", 150: "F#5", 151: "G5", 152: "G#5", 153: "A5", 154: "A#5", 155: "B5",
 }
 
 def main():
@@ -28,6 +31,12 @@ def main():
   third = 0.5
   fifth = -1.5
   seventh = 0.0
+
+  #chord created with 2 tones
+  base2 = 6.0
+  root_tone2 = base2
+  third_tone2 = -9.0
+  fifth_tone2 = base2
 
   #chord created with 3 tones
   base3 = 4.0
@@ -55,12 +64,20 @@ def main():
   template_minor_7 = np.roll(np.array([root_tone4, 0.0, 0.0, third_tone4, 0.0, 0.0, 0.0, fifth_tone4, 0.0, 0.0, seventh_tone4, 0.0]), key_shift)
   template_sus4_7 = np.roll(np.array([root_tone4, 0.0, 0.0, 0.0, 0.0, third_tone4, 0.0, fifth_tone4, 0.0, 0.0, seventh_tone4, 0.0]), key_shift)
   template_sus2_7 = np.roll(np.array([root_tone4, 0.0, third_tone4, 0.0, 0.0, 0.0, 0.0, fifth_tone4, 0.0, 0.0, seventh_tone4, 0.0]), key_shift)
+  template_dim_7 = np.roll(np.array([root_tone4, 0.0, 0.0, third_tone4, 0.0, 0.0, fifth_tone4, 0.0, 0.0, 0.0, 0.0, 0.0]), key_shift)
+  template_aug_7 = np.roll(np.array([root_tone4, 0.0, 0.0, 0.0, third_tone4, 0.0, 0.0, 0.0, fifth_tone4, 0.0, 0.0, 0.0]), key_shift)
 
-  templates = np.array([np.roll(template_major, k) for k in range(0, 12)] + [np.roll(template_minor, k) for k in range(0, 12)] + \
-    [np.roll(template_dim, k) for k in range(0, 12)] + [np.roll(template_aug, k) for k in range(0, 12)] + \
-    [np.roll(template_sus4, k) for k in range(0, 12)] + [np.roll(template_sus2, k) for k in range(0, 12)] + \
-    [np.roll(template_major_7, k) for k in range(0, 12)] + [np.roll(template_minor_7, k) for k in range(0, 12)] + \
-    [np.roll(template_sus4_7, k) for k in range(0, 12)] + [np.roll(template_sus2_7, k) for k in range(0, 12)])
+  #power chord
+  template_power = np.roll(np.array([root_tone2, 0.0, 0.0, 0.0, third_tone2, 0.0, 0.0, fifth_tone2, 0.0, 0.0, 0.0, 0.0]), key_shift)
+
+  templates = np.array([np.roll(template_major, k) for k in range(0, 12)] + [np.roll(template_minor, k) for k in range(0, 12)] + 
+    [np.roll(template_dim, k) for k in range(0, 12)] + [np.roll(template_aug, k) for k in range(0, 12)] + 
+    [np.roll(template_sus4, k) for k in range(0, 12)] + [np.roll(template_sus2, k) for k in range(0, 12)] + 
+    [np.roll(template_major_7, k) for k in range(0, 12)] + [np.roll(template_minor_7, k) for k in range(0, 12)] + 
+    [np.roll(template_sus4_7, k) for k in range(0, 12)] + [np.roll(template_sus2_7, k) for k in range(0, 12)] + 
+    [np.roll(template_dim_7, k) for k in range(0, 12)] + [np.roll(template_aug_7, k) for k in range(0, 12)] + 
+    [np.roll(template_power, k) for k in range(0,12)]
+  )
 
   audiofilepath: str = f"./{sys.argv[1]}"
 
