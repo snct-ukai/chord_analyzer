@@ -86,7 +86,8 @@ def main():
   i: int = 0
   j: int = 0
   for k in range(0, len(chord_matching_score[0])):
-    chord_data[:, j] += chord_matching_score[:, k]
+    if (i > (delta_chroma * 0.2) and i < (delta_chroma * 0.8)):
+      chord_data[:, j] += chord_matching_score[:, k]
     i += 1
     if i >= delta_chroma:
       i = 0
