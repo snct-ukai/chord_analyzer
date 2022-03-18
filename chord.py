@@ -1,4 +1,5 @@
 import numpy as np
+from numpy import linalg as LA
 import librosa
 import librosa.display
 import sys
@@ -59,6 +60,14 @@ def main():
   template_sus4 = np.roll(np.array([root_tone3, 0.0, 0.0, 0.0, 0.0, third_tone3, 0.0, fifth_tone3, 0.0, 0.0, 0.0, 0.0]), key_shift)
   template_sus2 = np.roll(np.array([root_tone3, 0.0, third_tone3, 0.0, 0.0, 0.0, 0.0, fifth_tone3, 0.0, 0.0, 0.0, 0.0]), key_shift)
 
+  template_major /= np.sqrt(sum(template_major ** 2))
+  template_minor /= np.sqrt(sum(template_minor ** 2))
+  template_dim /= np.sqrt(sum(template_dim ** 2))
+  template_aug /= np.sqrt(sum(template_aug ** 2))
+  template_sus4 /= np.sqrt(sum(template_sus4 ** 2))
+  template_sus2 /= np.sqrt(sum(template_sus2 ** 2))
+
+
   #4tones chord
   template_major_7 = np.roll(np.array([root_tone4, 0.0, 0.0, 0.0, third_tone4, 0.0, 0.0, fifth_tone4, 0.0, 0.0, seventh_tone4, 0.0]), key_shift)
   template_minor_7 = np.roll(np.array([root_tone4, 0.0, 0.0, third_tone4, 0.0, 0.0, 0.0, fifth_tone4, 0.0, 0.0, seventh_tone4, 0.0]), key_shift)
@@ -67,8 +76,17 @@ def main():
   template_dim_7 = np.roll(np.array([root_tone4, 0.0, 0.0, third_tone4, 0.0, 0.0, fifth_tone4, 0.0, 0.0, 0.0, 0.0, 0.0]), key_shift)
   template_aug_7 = np.roll(np.array([root_tone4, 0.0, 0.0, 0.0, third_tone4, 0.0, 0.0, 0.0, fifth_tone4, 0.0, 0.0, 0.0]), key_shift)
 
+  template_major_7 /= np.sqrt(sum(template_major_7 ** 2))
+  template_minor_7 /= np.sqrt(sum(template_minor_7 ** 2))
+  template_dim_7 /= np.sqrt(sum(template_dim_7 ** 2))
+  template_aug_7 /= np.sqrt(sum(template_aug_7 ** 2))
+  template_sus4_7 /= np.sqrt(sum(template_sus4_7 ** 2))
+  template_sus2_7 /= np.sqrt(sum(template_sus2_7 ** 2))
+
   #power chord
   template_power = np.roll(np.array([root_tone2, 0.0, 0.0, 0.0, third_tone2, 0.0, 0.0, fifth_tone2, 0.0, 0.0, 0.0, 0.0]), key_shift)
+
+  template_power /= np.sqrt(sum(template_power ** 2))
 
   templates = np.array([np.roll(template_major, k) for k in range(0, 12)] + [np.roll(template_minor, k) for k in range(0, 12)] + 
     [np.roll(template_dim, k) for k in range(0, 12)] + [np.roll(template_aug, k) for k in range(0, 12)] + 
@@ -86,27 +104,41 @@ def main():
   y_harmonic, y_percussive = librosa.effects.hpss(y)
 
   onset_env = librosa.onset.onset_strength(y, sr=sr)
-  tempo = librosa.beat.tempo(onset_envelope=onset_env, sr=sr)[0]
+  TEMPO = librosa.beat.tempo(onset_envelope=onset_env, sr=sr)[0]
 
   playtime = int(y.size/sr)
 
   print(f"再生時間:{playtime}")
-  print(f"テンポ:{tempo}")
+  print(f"テンポ:{TEMPO}")
 
-  chroma = librosa.feature.chroma_cqt(y=y_harmonic, sr=sr)
+  raw_chroma = librosa.feature.chroma_cqt(y=y_harmonic, sr=sr)
 
-  delta_chroma = int(2*60*len(chroma[0])/(tempo*playtime))
+  CPB = int(2 * 60 * len(raw_chroma[0]) / (TEMPO * playtime))
 
-  chord_matching_score = np.dot(templates, chroma) #templatesとchromaの内積
-  chord_data = np.zeros((len(chord_matching_score), int(len(chord_matching_score[0])/delta_chroma + 1)))
+  #chroma = np.zeros((len(raw_chroma), int(len(raw_chroma[0]) / CPB + 1)))
+#
+  #i: int = 0
+  #j: int = 0
+  #for k in range(0, len(chroma[0])):
+  #  if(i > (CPB * 0.2) and i < (CPB * 0.8)):
+  #    chroma[:, j] += raw_chroma[:, k]
+  #  i += 1
+  #  if (i >= CPB):
+  #    i = 0
+  #    j += 1
+#
+  #chord_data = np.dot(templates, chroma)
+
+  chord_matching_score = np.dot(templates, raw_chroma) #templatesとraw_chromaの積
+  chord_data = np.zeros((len(chord_matching_score), int(len(chord_matching_score[0])/CPB + 1)))
 
   i: int = 0
   j: int = 0
   for k in range(0, len(chord_matching_score[0])):
-    if (i > (delta_chroma * 0.2) and i < (delta_chroma * 0.8)):
+    if (i > (CPB * 0.2) and i < (CPB * 0.8)):
       chord_data[:, j] += chord_matching_score[:, k]
     i += 1
-    if i >= delta_chroma:
+    if i >= CPB:
       i = 0
       j += 1
 
