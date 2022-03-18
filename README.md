@@ -6,4 +6,6 @@ pythonで書いたコード進行を解析するプログラムです
 
 楽曲ファイルをコマンドライン引数として渡して実行をしてください
 
-`python3 chord.py <filepath>`
+第三引数には数字を指定することでキー変更ができます、+1したい場合は1を、-1したい場合は-1などを入力してください
+
+`python3 chord.py <filepath> <key_shift(option)>`
