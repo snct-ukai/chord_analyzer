@@ -102,7 +102,7 @@ def main():
   y, _sr = librosa.effects.trim(yt)
   y_harmonic, y_percussive = librosa.effects.hpss(y)
 
-  onset_env = librosa.onset.onset_strength(y, sr=sr)
+  onset_env = librosa.onset.onset_strength(y_percussive, sr=sr)
   TEMPO = librosa.beat.tempo(onset_envelope=onset_env, sr=sr)[0]
 
   playtime = int(y.size/sr)
