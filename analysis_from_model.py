@@ -56,10 +56,12 @@ def main():
   chord: str = ""
   i = 0
   for result in results:
-    chord += "{:10s}".format(chord_dic[result])
+    chord += "{:12s}".format(chord_dic[result])
     if (i + 1) % 16 == 0:
       chord += "\n"
     
+    i += 1
+
   print(chord)
 
 main()
